@@ -1,0 +1,1 @@
+﻿Content/Explosion.png & Content/Smoke.png- provided by the XNA project samples under the Microsoft Permissive License (https://github.com/CartBlanche/MonoGame-Samples)
