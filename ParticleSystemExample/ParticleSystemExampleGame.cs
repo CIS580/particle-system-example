@@ -52,7 +52,7 @@ namespace ParticleSystemExample
                 Exit();
 
             // TODO: Add your update logic here
-
+            
             base.Update(gameTime);
         }
 
@@ -62,7 +62,7 @@ namespace ParticleSystemExample
         /// <param name="gameTime">The time in the game</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 

@@ -5,7 +5,7 @@ namespace ParticleSystemExample
     /// <summary>
     /// A class representing a single particle in a particle system 
     /// </summary>
-    public class Particle
+    public struct Particle
     {
         /// <summary>
         /// The current position of the particle. Default (0,0).
@@ -40,7 +40,7 @@ namespace ParticleSystemExample
         /// <summary>
         /// The current scale of the particle.  Default 1.
         /// </summary>
-        public float Scale = 1.0f;
+        public float Scale;
 
         /// <summary>
         /// The current lifetime of the particle (how long it will "live").  Default 1s.
@@ -55,7 +55,7 @@ namespace ParticleSystemExample
         /// <summary>
         /// The current color of the particle. Default White
         /// </summary>
-        public Color Color = Color.White;
+        public Color Color;
 
         /// <summary>
         /// If this particle is still alive, and should be rendered
@@ -67,17 +67,17 @@ namespace ParticleSystemExample
         /// <summary>
         /// Sets the particle up for first use, restoring defaults
         /// </summary>
-        public void Initialize(Vector2 where)
+        public void Initialize(Vector2 where, float lifetime = 1, float scale = 1, float rotation = 0, float angularVelocity = 0, float angularAcceleration = 0)
         {
             this.Position = where;
             this.Velocity = Vector2.Zero;
             this.Acceleration = Vector2.Zero;
-            this.Rotation = 0;
-            this.AngularVelocity = 0;
-            this.AngularAcceleration = 0;
-            this.Scale = 1;
+            this.Rotation = rotation;
+            this.AngularVelocity = angularVelocity;
+            this.AngularAcceleration = angularAcceleration;
+            this.Scale = scale;
             this.Color = Color.White;
-            this.Lifetime = 1;
+            this.Lifetime = lifetime;
             this.TimeSinceStart = 0f;
         }
 

@@ -58,7 +58,7 @@ namespace ParticleSystemExample
         /// <summary>
         /// A Queue containing indices of unused particles in the Particles array
         /// </summary>
-        Queue<Particle> freeParticles;
+        Queue<int> freeParticles;
 
         /// <summary>
         /// The texture this particle system uses 
@@ -105,12 +105,12 @@ namespace ParticleSystemExample
         {
             // Create our particles
             particles = new Particle[maxParticles];
+            freeParticles = new Queue<int>(maxParticles);
             for (int i = 0; i < particles.Length; i++)
             {
-                particles[i] = new Particle();
+                particles[i].Initialize(Vector2.Zero);
+                freeParticles.Enqueue(i);
             }
-            // Add all free particles to the queue
-            freeParticles = new Queue<Particle>(particles);
             // Run the InitializeConstants hook
             InitializeConstants();
         }
@@ -132,7 +132,7 @@ namespace ParticleSystemExample
         /// <param name="p">the particle to initialize</param>
         /// <param name="where">the position on the screen that the particle should be
         /// </param>
-        protected virtual void InitializeParticle(Particle p, Vector2 where)
+        protected virtual void InitializeParticle(ref Particle p, Vector2 where)
         {
             // Initialize the particle with default values
             p.Initialize(where);
@@ -143,7 +143,7 @@ namespace ParticleSystemExample
         /// </summary>
         /// <param name="particle">The particle to update</param>
         /// <param name="dt">The elapsed time</param>
-        protected virtual void UpdateParticle(Particle particle, float dt)
+        protected virtual void UpdateParticle(ref Particle particle, float dt)
         {
             // Update particle's linear motion values
             particle.Velocity += particle.Acceleration * dt;
@@ -204,18 +204,18 @@ namespace ParticleSystemExample
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // go through all of the particles...
-            foreach (Particle p in particles)
+            for(int i = 0; i < particles.Length; i++)
             {
 
-                if (p.Active)
+                if (particles[i].Active)
                 {
                     // ... and if they're active, update them.
-                    UpdateParticle(p, dt);
+                    UpdateParticle(ref particles[i], dt);
                     // if that update finishes them, put them onto the free particles
                     // queue.
-                    if (!p.Active)
+                    if (!particles[i].Active)
                     {
-                        freeParticles.Enqueue(p);
+                        freeParticles.Enqueue(i);
                     }
                 }
             }
@@ -270,8 +270,8 @@ namespace ParticleSystemExample
             for (int i = 0; i < numParticles && freeParticles.Count > 0; i++)
             {
                 // grab a particle from the freeParticles queue, and Initialize it.
-                Particle p = freeParticles.Dequeue();
-                InitializeParticle(p, where);
+                int index = freeParticles.Dequeue();
+                InitializeParticle(ref particles[index], where);
             }
         }
 
@@ -293,8 +293,8 @@ namespace ParticleSystemExample
             for (int i = 0; i < numParticles && freeParticles.Count > 0; i++)
             {
                 // grab a particle from the freeParticles queue, and Initialize it.
-                Particle p = freeParticles.Dequeue();
-                InitializeParticle(p, RandomHelper.RandomPosition(where));
+                int index = freeParticles.Dequeue();
+                InitializeParticle(ref particles[index], RandomHelper.RandomPosition(where));
             }
         }
 
